@@ -4,6 +4,8 @@ logs
 npm-debug.log*
 memory.mdc
 *prices.txt
+.vscode/
+
 
 # Runtime data
 pids
@@ -44,3 +46,16 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 .next
+
+node_modules
+target
+dist
+logs
+public
+.cache
+.vscode
+.DS_Store
+.idea
+.next
+yarn-error.log
+npm-debug.log

@@ -1,6 +1,6 @@
 # Social Autonomies
 
-AI-driven X automation platform for creating intelligent agents that can post, engage, and analyze performance automatically.
+AI-driven X automation platform for creating intelligent agents that can post, engage, and analyze performance automatically. The idea is to allow users to organically grow their X accounts. 
 
 ![Social Autonomies Platform](/public/image.png)
 
@@ -60,6 +60,25 @@ This project is open source under the MIT license - you're free to use, modify, 
 ## Environment Variables
 
 See `env.example` for all required configuration.
+
+## 💡 Inspiration & Integration
+
+This project was inspired by and integrates with several amazing open-source libraries:
+
+### Core Twitter Automation
+- **[agent-twitter-client](https://github.com/elizaOS/agent-twitter-client)** - Primary X client used for automation
+- **[@0xindie/agent-twitter-client](https://www.npmjs.com/package/@0xindie/agent-twitter-client)** - Alternative X client implementation
+
+### Learning Resources
+- **[Building Agents](https://cmdcolin.github.io/posts/2022-08-26-twitterbot)**
+
+### Additional Libraries
+- **[twitter-scraper](https://github.com/the-convocation/twitter-scraper)** - Powerful X scraping capabilities for data collection
+
+### Integration Opportunities
+These libraries can be easily integrated into Social Autonomies to extend functionality:
+- Enhanced scraping capabilities
+- Alternative authentication methods  
 
 ## License
 
