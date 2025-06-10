@@ -14,6 +14,27 @@ Tweet - [What Can It Do?](https://x.com/defichemist95/status/1932305977031667827
 - Tweet scheduling
 - Subscription management
 
+## 📱 Platform Overview
+
+### Core Features
+![Platform Features](/public/feature.png)
+*Organic growth, intelligent scheduling, and smart content generation*
+
+### Analytics Dashboard
+![Analytics Dashboard](/public/analytics.png)
+*Real-time monitoring of your agent's tweeting performance and engagement metrics*
+
+![Tweet Analytics](/public/tweets.png)
+*Detailed tweet analytics with success rates and activity tracking*
+
+### Pricing Plans
+![Pricing Structure](/public/oricing.png)
+*Flexible pricing tiers for different account sizes and needs*
+
+### User Profile & Usage
+![User Profile](/public/profile.png)
+*Track your subscription plan and usage limits in real-time*
+
 ## 🍴 Fork & Use
 
 **Feel free to fork this repository and use it for your own projects!**
