@@ -35,16 +35,8 @@ Tweet - [What Can It Do?](https://x.com/defichemist95/status/1932305977031667827
 ![User Profile](/public/profile.png)
 *Track your subscription plan and usage limits in real-time*
 
-## 🍴 Fork & Use
 
-**Feel free to fork this repository and use it for your own projects!**
-
-1. Click the **"Fork"** button at the top of this repository
-2. Clone your forked version to your local machine
-3. Customize it to your needs
-4. Deploy your own version
-
-This project is open source under the MIT license - you're free to use, modify, and distribute it however you like.
+This project is open source under the MIT license - you're free to use, modify, and distribute it however you like. No limits imposed. 
 
 ## Quick Start
 
