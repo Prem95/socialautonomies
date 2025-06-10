@@ -5,63 +5,57 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting to seed the database...');
 
-  // Create Basic Plan (monthly only)
+  // Create Basic Plan (monthly)
   const basicPlan = await prisma.plan.upsert({
     where: { planId: 1n },
-    update: {
-      maxRepliesPerAgent: 50, // Monthly limit
-    },
+    update: {},
     create: {
       planId: 1n,
       planName: 'Basic',
-      price: 9.00, // Monthly price
+      price: 0.00, // Set your pricing
       currency: 'usd',
       interval: 'month',
-      stripePriceId: 'price_1RW8CUGfaTlhTw0SKNc1lXks', // Monthly Stripe price ID
+      stripePriceId: 'your_stripe_price_id_basic', // Replace with your Stripe price ID
       maxAgents: 1,
-      maxTweetsPerAgent: 15, // Monthly limit
-      maxCustomGenerations: 15, // Monthly limit
-      maxRepliesPerAgent: 50, // Monthly limit
+      maxTweetsPerAgent: 15, // Configure your limits
+      maxCustomGenerations: 15,
+      maxRepliesPerAgent: 50,
     },
   });
 
-  // Create Standard Plan (monthly only)
+  // Create Standard Plan (monthly)
   const standardPlan = await prisma.plan.upsert({
     where: { planId: 2n },
-    update: {
-      maxRepliesPerAgent: 100, // Monthly limit
-    },
+    update: {},
     create: {
       planId: 2n,
       planName: 'Standard',
-      price: 19.00, // Monthly price
+      price: 0.00, // Set your pricing
       currency: 'usd',
       interval: 'month',
-      stripePriceId: 'price_1RW8CmGfaTlhTw0S7IqcENnf', // Monthly Stripe price ID
+      stripePriceId: 'your_stripe_price_id_standard', // Replace with your Stripe price ID
       maxAgents: 1,
-      maxTweetsPerAgent: 30, // Monthly limit
-      maxCustomGenerations: 40, // Monthly limit
-      maxRepliesPerAgent: 100, // Monthly limit
+      maxTweetsPerAgent: 30, // Configure your limits
+      maxCustomGenerations: 40,
+      maxRepliesPerAgent: 100,
     },
   });
 
-  // Create Expert Plan (monthly only)
+  // Create Expert Plan (monthly)
   const expertPlan = await prisma.plan.upsert({
     where: { planId: 3n },
-    update: {
-      maxRepliesPerAgent: 200, // Monthly limit
-    },
+    update: {},
     create: {
       planId: 3n,
       planName: 'Expert',
-      price: 29.00, // Monthly price
+      price: 0.00, // Set your pricing
       currency: 'usd',
       interval: 'month',
-      stripePriceId: 'price_1RW8D2GfaTlhTw0SPr7kFojz', // Monthly Stripe price ID
+      stripePriceId: 'your_stripe_price_id_expert', // Replace with your Stripe price ID
       maxAgents: 1,
-      maxTweetsPerAgent: 60, // Monthly limit
-      maxCustomGenerations: 100, // Monthly limit
-      maxRepliesPerAgent: 200, // Monthly limit
+      maxTweetsPerAgent: 60, // Configure your limits
+      maxCustomGenerations: 100,
+      maxRepliesPerAgent: 200,
     },
   });
 
@@ -71,13 +65,7 @@ async function main() {
   console.log('📦 Expert Plan:', expertPlan);
 
   console.log('🎉 Database seeding completed successfully!');
-  console.log('💰 Pricing Structure (Monthly Only):');
-  console.log('   Basic: $9/month - 15 tweets, 15 generations, 50 replies');
-  console.log('   Standard: $19/month - 30 tweets, 40 generations, 100 replies');
-  console.log('   Expert: $29/month - 60 tweets, 100 generations, 200 replies');
-  console.log('');
-  console.log('📝 Each plan contains monthly Stripe price ID only:');
-  console.log('   - stripePriceId: Monthly recurring price');
+  console.log('💡 Remember to update pricing and Stripe price IDs in the seed file');
 }
 
 main()

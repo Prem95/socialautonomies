@@ -44,12 +44,47 @@ This project is open source under the MIT license - you're free to use, modify, 
    ```bash
    npx prisma generate
    npx prisma migrate deploy
+   npx prisma db seed
    ```
 
 4. **Run**
    ```bash
    npm run dev
    ```
+
+## ⚙️ Pricing Configuration
+
+Configure your own subscription plans by editing `prisma/seed.ts`:
+
+### 1. Create Stripe Products
+1. Go to your [Stripe Dashboard](https://dashboard.stripe.com/products)
+2. Create products for each plan (Basic, Standard, Expert)
+3. Copy the price IDs
+
+### 2. Update Seed File
+```typescript
+// In prisma/seed.ts, update these values:
+{
+  planName: 'Basic',
+  price: 9.99, // Your pricing
+  stripePriceId: 'price_your_stripe_id', // Your Stripe price ID
+  maxTweetsPerAgent: 15, // Your limits
+  maxRepliesPerAgent: 50,
+  // ... other limits
+}
+```
+
+### 3. Run Database Seed
+```bash
+npx prisma db seed
+```
+
+### Example Plan Structure
+- **Basic**: Lower limits, affordable pricing
+- **Standard**: Medium limits, mid-tier pricing  
+- **Expert**: Higher limits, premium pricing
+
+Customize the limits and pricing to match your business model!
 
 ## Tech Stack
 
