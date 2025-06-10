@@ -52,7 +52,7 @@ This project is open source under the MIT license - you're free to use, modify, 
    npm run dev
    ```
 
-## ⚙️ Pricing Configuration
+## Configuration
 
 Configure your own subscription plans by editing `prisma/seed.ts`:
 
@@ -63,7 +63,6 @@ Configure your own subscription plans by editing `prisma/seed.ts`:
 
 ### 2. Update Seed File
 ```typescript
-// In prisma/seed.ts, update these values:
 {
   planName: 'Basic',
   price: 9.99, // Your pricing
@@ -79,12 +78,6 @@ Configure your own subscription plans by editing `prisma/seed.ts`:
 npx prisma db seed
 ```
 
-### Example Plan Structure
-- **Basic**: Lower limits, affordable pricing
-- **Standard**: Medium limits, mid-tier pricing  
-- **Expert**: Higher limits, premium pricing
-
-Customize the limits and pricing to match your business model!
 
 ## Tech Stack
 
@@ -96,7 +89,7 @@ Customize the limits and pricing to match your business model!
 
 See `env.example` for all required configuration.
 
-## 💡 Inspiration & Integration
+## Other Projects
 
 This project was inspired by and integrates with several amazing open-source libraries:
 
@@ -115,17 +108,13 @@ These libraries can be easily integrated into Social Autonomies to extend functi
 - Enhanced scraping capabilities
 - Alternative authentication methods  
 
-## 📱 Connect & Follow
+## Personal Links
 
 ### Creator
-- 🐦 **Twitter/X**: [@defichemist95](https://x.com/defichemist95)
-- 🌐 **Website**: [www.premstroke.com](https://www.premstroke.com)
-- 💼 **LinkedIn**: [premstrk](https://www.linkedin.com/in/premstrk/)
+- **Twitter/X**: [@defichemist95](https://x.com/defichemist95)
+- **Website**: [www.premstroke.com](https://www.premstroke.com)
+- **LinkedIn**: [premstrk](https://www.linkedin.com/in/premstrk/)
 
-### Project
-- ⭐ **Star this repo** if you find it useful!
-- 🍴 **Fork it** to create your own version
-- 📢 **Share it** with your network
 
 ## License
 
