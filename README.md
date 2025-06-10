@@ -14,12 +14,23 @@ Tweet - [What Can It Do?](https://x.com/defichemist95/status/1932305977031667827
 - Tweet scheduling
 - Subscription management
 
+## 🍴 Fork & Use
+
+**Feel free to fork this repository and use it for your own projects!**
+
+1. Click the **"Fork"** button at the top of this repository
+2. Clone your forked version to your local machine
+3. Customize it to your needs
+4. Deploy your own version
+
+This project is open source under the MIT license - you're free to use, modify, and distribute it however you like.
+
 ## Quick Start
 
 1. **Clone and install**
    ```bash
-   git clone <repository-url>
-   cd twitter-agent-platform
+   git clone https://github.com/Prem95/socialautonomies.git
+   cd socialautonomies
    npm install
    ```
 
@@ -56,4 +67,4 @@ MIT - see [LICENSE](LICENSE) for details.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. 
+Fork the repository and submit pull requests for any improvements! 
