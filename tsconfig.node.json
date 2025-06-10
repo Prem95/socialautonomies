@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "noEmit": false,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "allowJs": true
+  },
+  "ts-node": {
+    "transpileOnly": true
+  },
+  "include": ["app/**/*"]
+}

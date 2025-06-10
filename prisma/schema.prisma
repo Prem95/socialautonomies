@@ -1,0 +1,270 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Plan {
+  planId               BigInt    @id @default(autoincrement()) @map("plan_id")
+  planName             String    @map("plan_name")
+  price                Decimal   @db.Decimal(10, 2)
+  currency             String
+  interval             String
+  stripePriceId        String    @map("stripe_price_id")
+  maxAgents            Int       @default(1) @map("max_agents")
+  maxTweetsPerAgent    Int       @default(10) @map("max_tweets_per_agent")
+  maxCustomGenerations Int       @default(10) @map("max_custom_generations")
+  maxRepliesPerAgent   Int       @default(50) @map("max_replies_per_agent")
+  profiles             Profile[]
+
+  // Optimized indexes for Plan lookups
+  @@index([stripePriceId])
+  @@map("plans")
+}
+
+model Profile {
+  userId                String    @id @map("user_id") @db.Uuid
+  planId                BigInt?   @map("plan_id")
+  profileCreatedAt      DateTime  @default(now()) @map("profile_created_at") @db.Timestamptz(6)
+  stripeCustomerId      String?   @map("stripe_customer_id")
+  customGenerationsUsed Int       @default(0) @map("custom_generations_used")
+  tweetsUsed            Int       @default(0) @map("tweets_used")
+  repliesUsed           Int       @default(0) @map("replies_used")
+  
+  // Billing Information (Monthly Only)
+  stripeSubscriptionId  String?   @map("stripe_subscription_id")
+  stripePriceId         String?   @map("stripe_price_id") // Current active price ID
+  subscriptionStatus    String    @default("inactive") @map("subscription_status") // "active", "canceled", "past_due", "incomplete", etc.
+  currentPeriodStart    DateTime? @map("current_period_start") @db.Timestamptz(6)
+  currentPeriodEnd      DateTime? @map("current_period_end") @db.Timestamptz(6)
+  cancelAtPeriodEnd     Boolean   @default(false) @map("cancel_at_period_end")
+  trialStart            DateTime? @map("trial_start") @db.Timestamptz(6)
+  trialEnd              DateTime? @map("trial_end") @db.Timestamptz(6)
+  
+  // Usage Reset Tracking
+  lastUsageReset        DateTime? @map("last_usage_reset") @db.Timestamptz(6)
+  usageResetDay         Int?      @map("usage_reset_day") // Day of month when usage resets (1-31)
+  
+  agents                Agent[]
+  cookies               Cookie[]
+  plan                  Plan?     @relation(fields: [planId], references: [planId])
+
+  // Optimized indexes for Profile queries
+  @@index([planId]) // Foreign key index
+  @@index([stripeCustomerId]) // Stripe customer lookups
+  @@index([stripeSubscriptionId])
+  @@index([subscriptionStatus])
+  @@index([subscriptionStatus, currentPeriodEnd]) // Compound for billing checks
+  @@index([currentPeriodEnd])
+  @@index([lastUsageReset])
+  @@index([trialEnd]) // For trial expiration checks
+  @@map("profiles")
+}
+
+model TwitterAuth {
+  twitterAuthId        String   @id @default(uuid()) @map("twitter_auth_id") @db.Uuid
+  agentId              String   @unique @map("agent_id") @db.Uuid
+  accessToken          String?  @map("access_token")
+  accessSecret         String?  @map("access_secret")
+  twitterUserId        String?  @map("twitter_user_id")
+  twitterScreenName    String?  @map("twitter_screen_name")
+  tempOauthToken       String?  @map("temp_oauth_token")
+  tempOauthTokenSecret String?  @map("temp_oauth_token_secret")
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  agent                Agent    @relation(fields: [agentId], references: [agentId], onDelete: Cascade)
+
+  @@index([twitterUserId])
+  @@index([twitterScreenName])
+  @@index([tempOauthToken])
+  @@index([createdAt])
+  @@map("twitter_auths")
+}
+
+model Agent {
+  userId                   String        @map("user_id") @db.Uuid
+  name                     String
+  goal                     String
+  brand                    Json?
+  specialHooks             Json?         @map("special_hooks")
+  language                 String        @default("en-US")
+  exampleUserQuestion      String?       @map("example_user_question")
+  exampleAgentReply        String?       @map("example_agent_reply")
+  status                   AgentStatus   @default(stopped)
+  startTime                DateTime?     @map("start_time") @db.Timestamptz(6)
+  endTime                  DateTime?     @map("end_time") @db.Timestamptz(6)
+  autoReply                Boolean       @default(false) @map("auto_reply")
+  maxDailyReplies          Int           @default(10) @map("max_daily_replies")
+  maxDailyTweets           Int           @default(5) @map("max_daily_tweets")
+  schedule                 Json?
+  agentId                  String        @id @default(uuid()) @map("agent_id") @db.Uuid
+  autoTweetEnabled         Boolean       @default(false) @map("auto_tweet_enabled")
+  lastAutoTweetTime        DateTime?     @map("last_auto_tweet_time") @db.Timestamptz(6)
+  autoTweetCount           Int?          @map("auto_tweet_count")
+  autoTweetFrequencyHours  Int?          @map("auto_tweet_frequency_hours")
+  autoEngageAutoReply      Boolean       @default(false) @map("auto_engage_auto_reply")
+  autoEngageEnabled        Boolean       @default(false) @map("auto_engage_enabled")
+  autoEngageFrequencyHours Float?        @map("auto_engage_frequency_hours")
+  autoEngageMaxReplies     Int?          @map("auto_engage_max_replies")
+  autoEngageMinScore       Int?          @map("auto_engage_min_score")
+  autoEngageQualityFilter  Boolean       @default(true) @map("auto_engage_quality_filter")
+  autoEngageStrictnessLevel Int          @default(2) @map("auto_engage_strictness_level")
+  lastAutoEngageTime       DateTime?     @map("last_auto_engage_time") @db.Timestamptz(6)
+  workers                  AgentWorker[]
+  profile                  Profile       @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  replies                  Reply[]
+  tweets                   Tweet[]
+  twitterAuth              TwitterAuth?
+
+  @@index([userId, status])
+  @@index([status, autoTweetEnabled, autoTweetFrequencyHours], name: "idx_agents_auto_tweet_lookup")
+  @@index([status, autoEngageEnabled, autoEngageFrequencyHours], name: "idx_agents_auto_engage_lookup")
+  @@index([lastAutoTweetTime], name: "idx_agents_last_auto_tweet_time")
+  @@index([lastAutoEngageTime], name: "idx_agents_last_auto_engage_time")
+  @@index([autoTweetEnabled, lastAutoTweetTime], name: "idx_agents_auto_tweet_timing")
+  @@index([autoEngageEnabled, lastAutoEngageTime], name: "idx_agents_auto_engage_timing")
+  @@map("agents")
+}
+
+model AgentWorker {
+  lastHeartbeat DateTime?    @map("last_heartbeat") @db.Timestamptz(6)
+  startedAt     DateTime     @default(now()) @map("started_at") @db.Timestamptz(6)
+  stoppedAt     DateTime?    @map("stopped_at") @db.Timestamptz(6)
+  config        Json?
+  error         String?
+  workerId      String       @id @default(uuid()) @map("worker_id") @db.Uuid
+  agentId       String       @map("agent_id") @db.Uuid
+  status        WorkerStatus @default(INITIALIZING)
+  agent         Agent        @relation(fields: [agentId], references: [agentId], onDelete: Cascade)
+
+  @@index([agentId, status])
+  @@index([status, lastHeartbeat])
+  @@index([lastHeartbeat])
+  @@index([startedAt])
+  @@map("agent_workers")
+}
+
+model Tweet {
+  text           String
+  postTime       DateTime?   @map("post_time") @db.Timestamptz(6)
+  twitterTweetId String?     @unique @map("twitter_tweet_id")
+  likes          Int         @default(0)
+  retweets       Int         @default(0)
+  replies        Int         @default(0)
+  url            String?
+  tweetId        String      @id @default(uuid()) @map("tweet_id") @db.Uuid
+  agentId        String      @map("agent_id") @db.Uuid
+  status         TweetStatus @default(posted)
+  context        String?
+  agent          Agent       @relation(fields: [agentId], references: [agentId], onDelete: Cascade)
+
+  @@index([agentId])
+  @@index([status, postTime], name: "idx_tweets_scheduled_lookup")
+  @@index([agentId, status], name: "idx_tweets_agent_status")
+  @@index([postTime])
+  @@index([agentId, postTime])
+  @@index([likes, retweets, replies], name: "idx_tweets_engagement")
+  @@index([status, agentId, postTime], name: "idx_tweets_status_agent_time")
+  @@map("tweets")
+}
+
+model Reply {
+  replyId           String      @id @default(uuid()) @map("reply_id") @db.Uuid
+  agentId           String      @map("agent_id") @db.Uuid
+  originalTweetId   String      @map("original_tweet_id")
+  originalTweetText String      @map("original_tweet_text")
+  originalTweetUser String      @map("original_tweet_user")
+  replyText         String      @map("reply_text")
+  status            ReplyStatus @default(pending)
+  score             Int         @default(0)
+  scheduledTime     DateTime?   @map("scheduled_time") @db.Timestamptz(6)
+  postedTime        DateTime?   @map("posted_time") @db.Timestamptz(6)
+  twitterReplyId    String?     @unique @map("twitter_reply_id")
+  confidence        Float?      @default(0.0)
+  createdAt         DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  agent             Agent       @relation(fields: [agentId], references: [agentId], onDelete: Cascade)
+
+  @@unique([agentId, originalTweetId])
+  @@index([agentId, status])
+  @@index([originalTweetId])
+  @@index([scheduledTime])
+  @@index([status, scheduledTime])
+  @@index([score, confidence])
+  @@index([createdAt])
+  @@index([originalTweetUser])
+  @@map("replies")
+}
+
+model Cookie {
+  cookieId BigInt    @id @default(autoincrement()) @map("cookie_id")
+  userId   String    @map("user_id") @db.Uuid
+  key      String
+  value    String
+  expires  DateTime? @db.Timestamptz(6)
+  domain   String?
+  path     String?
+  secure   Boolean   @default(false)
+  httpOnly Boolean   @default(false) @map("http_only")
+  sameSite String?   @map("same_site")
+  profile  Profile   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@unique([userId, key])
+  @@index([userId, expires], name: "idx_cookies_user_expires")
+  @@index([expires], name: "idx_cookies_expires")
+  @@map("cookies")
+}
+
+model Waitlist {
+  id        String   @id @default(uuid()) @map("id") @db.Uuid
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  status    String   @default("pending")
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([status, createdAt])
+  @@map("waitlist")
+}
+
+enum AgentStatus {
+  stopped
+  running
+  error
+
+  @@map("agent_status")
+}
+
+enum WorkerStatus {
+  INITIALIZING
+  RUNNING
+  STOPPING
+  STOPPED
+  ERROR
+
+  @@map("worker_status")
+}
+
+enum TweetStatus {
+  scheduled
+  posting
+  posted
+  failed
+
+  @@map("tweet_status")
+}
+
+enum ReplyStatus {
+  pending
+  posting
+  posted
+  failed
+  rejected
+
+  @@map("reply_status")
+}

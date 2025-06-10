@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 30% 98%;
+    --foreground: 150 40% 12%;
+    
+    /* Card & UI Elements */
+    --card: 0 0% 100%;
+    --card-foreground: 150 40% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 40% 12%;
+    
+    /* Brand Colors */
+    --primary: 15 56% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 145 15% 35%;
+    --secondary-foreground: 0 0% 100%;
+    
+    /* UI States */
+    --muted: 36 30% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 15 56% 97%;
+    --accent-foreground: 15 56% 45%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Borders & Forms */
+    --border: 36 30% 92%;
+    --input: 36 30% 92%;
+    --ring: 15 56% 45%;
+    --radius: 0.75rem;
+
+    /* Custom Colors */
+    --venetian-lace: 36 25% 92%;
+    --macadamia-beige: 36 25% 85%;
+    --fiery-glow: 15 56% 45%;
+    --pumpkin-vapor: 30 89% 65%;
+    --fence-green: 150 40% 12%;
+    --norfolk-green: 145 15% 35%;
+
+    /* Glass Effect */
+    --glass-bg: 0 0% 100%;
+    --glass-border: 0 0% 100%;
+    --glass-shadow: 0 0% 0%;
+  }
+
+  .dark {
+    --background: 150 40% 10%;
+    --foreground: 36 30% 98%;
+    --card: 150 40% 12%;
+    --card-foreground: 36 30% 98%;
+    --popover: 150 40% 12%;
+    --popover-foreground: 36 30% 98%;
+    --primary: 15 56% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 145 15% 45%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 150 40% 15%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 15 56% 15%;
+    --accent-foreground: 15 56% 55%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 36 30% 98%;
+    --border: 150 40% 20%;
+    --input: 150 40% 20%;
+    --ring: 15 56% 55%;
+
+    /* Custom Colors - Dark Mode */
+    --venetian-lace: 36 25% 15%;
+    --macadamia-beige: 36 25% 20%;
+    --fiery-glow: 15 56% 55%;
+    --pumpkin-vapor: 30 89% 35%;
+    --fence-green: 150 40% 88%;
+    --norfolk-green: 145 15% 65%;
+
+    /* Glass Effect - Dark Mode */
+    --glass-bg: 0 0% 0%;
+    --glass-border: 0 0% 100%;
+    --glass-shadow: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground relative min-h-screen;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      var(--venetian-lace) 0%,
+      var(--macadamia-beige) 100%
+    );
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans tracking-tight font-bold;
+  }
+
+  h1 { @apply text-4xl md:text-5xl lg:text-6xl; }
+  h2 { @apply text-3xl md:text-4xl lg:text-5xl; }
+  h3 { @apply text-2xl md:text-3xl lg:text-4xl; }
+  h4 { @apply text-xl md:text-2xl lg:text-3xl; }
+}
+
+@layer components {
+  .hero-title {
+    @apply text-[2.25rem] leading-[1.15] md:text-[3.5rem] md:leading-[1.1] lg:text-[4.5rem] lg:leading-[1.05];
+  }
+
+  .hero-dot {
+    @apply h-2 w-2 rounded-full bg-primary/20;
+  }
+
+  .card-shadow {
+    @apply shadow-[0_4px_20px_-4px_rgba(154,52,18,0.1)];
+  }
+
+  .button-shadow {
+    @apply shadow-[0_2px_8px_-2px_rgba(154,52,18,0.2)];
+  }
+
+  .gradient-bg {
+    background: linear-gradient(
+      180deg,
+      var(--venetian-lace) 0%,
+      var(--macadamia-beige) 100%
+    );
+  }
+
+  .gradient-card {
+    @apply bg-white/80 backdrop-blur-sm dark:bg-black/20;
+  }
+
+  .glass-morphism {
+    @apply bg-white/15 backdrop-blur-[10px] border border-white/20;
+    box-shadow: 0 8px 32px rgba(var(--glass-shadow), 0.1);
+  }
+
+  .dashboard-card {
+    @apply bg-white rounded-lg border
+           shadow-sm hover:shadow-md transition-all duration-200;
+  }
+
+  .dashboard-header {
+    @apply text-3xl font-bold mb-2;
+  }
+
+  .dashboard-subheader {
+    @apply text-xl text-norfolk-green/80 mb-6;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r bg-clip-text text-transparent;
+  }
+  
+  .bg-gradient-subtle {
+    @apply bg-gradient-to-b from-background via-background to-muted;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:translate-y-[-2px] hover:card-shadow;
+  }
+
+  .button-hover {
+    @apply transition-all duration-200 hover:translate-y-[-1px] hover:button-shadow active:translate-y-[0px];
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
