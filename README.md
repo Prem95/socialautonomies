@@ -115,6 +115,18 @@ These libraries can be easily integrated into Social Autonomies to extend functi
 - Enhanced scraping capabilities
 - Alternative authentication methods  
 
+## 📱 Connect & Follow
+
+### Creator
+- 🐦 **Twitter/X**: [@defichemist95](https://x.com/defichemist95)
+- 🌐 **Website**: [www.premstroke.com](https://www.premstroke.com)
+- 💼 **LinkedIn**: [premstrk](https://www.linkedin.com/in/premstrk/)
+
+### Project
+- ⭐ **Star this repo** if you find it useful!
+- 🍴 **Fork it** to create your own version
+- 📢 **Share it** with your network
+
 ## License
 
 MIT - see [LICENSE](LICENSE) for details.
